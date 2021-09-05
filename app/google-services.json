@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "156780866400",
+    "project_id": "interconsulta-compose",
+    "storage_bucket": "interconsulta-compose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156780866400:android:bff99f60109cdc565d8c05",
+        "android_client_info": {
+          "package_name": "com.gsoft.interconsulta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156780866400-njt1v4vh0gfd1hnaa1odvqjg10vitdu4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gsoft.interconsulta",
+            "certificate_hash": "4cfc10eb56c20cd9989a3721566dc9914eb129b0"
+          }
+        },
+        {
+          "client_id": "156780866400-ilgvkd63h1eith2vcppvh00ig05c2fmv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe2yrLuJ7yASqDQI-0W7akN0GCujvx25c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156780866400-ilgvkd63h1eith2vcppvh00ig05c2fmv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
