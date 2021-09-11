@@ -1,6 +1,7 @@
 package com.gsoft.interconsulta.ui.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -60,6 +61,7 @@ fun NoteItem(note: String, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.padding(8.dp)
+                .scrollable(state = state, orientation = Orientation.Vertical)
         ) {
 
             Text(note,
@@ -67,7 +69,8 @@ fun NoteItem(note: String, viewModel: MainViewModel) {
             fontWeight = FontWeight.ExtraBold,
             fontSize = 22.sp,
             modifier = Modifier.height(250.dp),
-                maxLines = 8)
+                maxLines = 8
+            )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,

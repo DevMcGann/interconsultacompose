@@ -14,13 +14,13 @@ import androidx.compose.ui.unit.sp
 import com.gsoft.interconsulta.utils.darkerBlue
 
 @Composable
-fun PatientInfoCard(name:String, dni:String){
+fun PatientInfoCard(name: String, dni: String, surgery: String){
     Card(
         shape = RoundedCornerShape(15.dp),
         backgroundColor = darkerBlue,
         modifier = Modifier
             .padding(12.dp)
-            .height(200.dp)
+            .height(240.dp)
             .fillMaxWidth()
     ) {
         Column(
@@ -34,6 +34,8 @@ fun PatientInfoCard(name:String, dni:String){
             Text(text = "Dni", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
             Spacer(modifier = Modifier.height(5.dp))
             Text(text = dni, color = Color.White, fontSize = 30.sp,fontWeight = FontWeight.ExtraBold)
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(text = surgery, color = Color.White, fontSize = 30.sp,fontWeight = FontWeight.ExtraBold)
         }
     }
 }

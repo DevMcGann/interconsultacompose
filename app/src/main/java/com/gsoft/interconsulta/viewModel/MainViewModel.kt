@@ -1,5 +1,6 @@
 package com.gsoft.interconsulta.viewModel
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.MutableLiveData
@@ -33,15 +34,24 @@ class MainViewModel @Inject constructor(
 
     var error = mutableStateOf(false)
 
+    var selectedCategory = mutableStateOf("")
+
     var nombre =  mutableStateOf("")
 
     var dni = mutableStateOf("")
 
+    var surgery = mutableStateOf("")
+
+    ///////////////////////listas
+
     var laboratoryList = mutableStateListOf<String>()
         private set
+    var laboratoryListUri = mutableStateListOf<Uri?>(null)
 
     var studiesList = mutableStateListOf<String>()
         private set
+    var studiesListUri = mutableStateListOf<Uri?>(null)
+
 
     var notesList = mutableStateListOf<String>()
         private set
@@ -63,6 +73,21 @@ class MainViewModel @Inject constructor(
         studiesList.remove(item)
     }
 
+    fun addUriToLaboratory(uri:Uri){
+        laboratoryListUri.add(uri)
+    }
+    fun removeUriFromLaboratory(uri:Uri){
+        laboratoryListUri.remove(uri)
+    }
+
+    fun addUriToStudies(uri:Uri){
+        studiesListUri.add(uri)
+    }
+    fun removeUriFromStudies(uri:Uri){
+        studiesListUri.remove(uri)
+    }
+
+
     fun addItemToNotes(item:String){
         notesList.add(item)
     }
@@ -71,11 +96,15 @@ class MainViewModel @Inject constructor(
         notesList.remove(item)
     }
 
+    ///////////END LISTAS
+
     fun clearViewModel(){
         dni.value = ""
         nombre.value = ""
         studiesList.clear()
         laboratoryList.clear()
+        laboratoryListUri.clear()
+        studiesListUri.clear()
         notesList.clear()
         showPatient.value = false
     }
@@ -85,6 +114,76 @@ class MainViewModel @Inject constructor(
 
     fun addPatient(patient: Patient){
         repo.insert(patient)
+    }
+
+    fun finishInsertNewPatient(){
+        var labList : MutableList<String> = mutableListOf()
+
+        for (item in laboratoryList){
+            labList.add(item)
+        }
+
+        var studyList : MutableList<String> = mutableListOf()
+
+        for (item in studiesList){
+            studyList.add(item)
+        }
+
+        var noteList : MutableList<String> = mutableListOf()
+
+        for (item in notesList){
+            noteList.add(item)
+        }
+
+        val paciente = Patient(
+            dni = dni.value,
+            nombre = nombre.value,
+            surgery= surgery.value,
+            laboratory = labList,
+            studies =studyList ,
+            notes =noteList
+        )
+
+        addPatient(paciente)
+
+    }
+
+    fun uploadStudiesToStorageAndGetURL() = liveData(Dispatchers.IO){
+        var lista : MutableList<Uri> = mutableListOf()
+        emit(Resultado.Loading())
+        try{
+            for (uri in studiesListUri){
+                lista.add(uri!!)
+            }
+            emit(repo.uploadImagesAndGetURL(lista))
+        }catch (e:Exception){
+            emit(Resultado.Failure(e))
+        }
+    }
+    fun uploadStudiesToStorageAndGetURL2() = liveData<MutableList<String>>(Dispatchers.IO){
+        var lista : MutableList<Uri> = mutableListOf()
+        try{
+            //studieslist is populated with images selected from phone`gallery
+            for (uri in studiesListUri){
+                lista.add(uri!!)
+            }
+           repo.uploadImagesAndGetURL2(lista)
+        }catch (e:Exception){
+
+        }
+    }
+
+    fun uploadLaboratoryToStorageAndGetURL() = liveData(Dispatchers.IO){
+        var lista : MutableList<Uri> = mutableListOf()
+        emit(Resultado.Loading())
+        try{
+            for (uri in laboratoryListUri){
+                lista.add(uri!!)
+            }
+            emit(repo.uploadImagesAndGetURL(lista))
+        }catch (e:Exception){
+            emit(Resultado.Failure(e))
+        }
     }
 
     fun updatePaciente (patient: Patient){
@@ -108,6 +207,8 @@ class MainViewModel @Inject constructor(
                         currentPatient.value = result.data
                          dni.value = result.data.dni
                         nombre.value = result.data.nombre
+                        surgery.value = result.data.surgery
+
                         if( result.data.laboratory != null){
                             for (lab in result.data.laboratory){
                                 addItemToLaboratory(lab)

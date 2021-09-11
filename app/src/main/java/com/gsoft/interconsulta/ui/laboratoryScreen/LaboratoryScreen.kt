@@ -1,5 +1,7 @@
 package com.gsoft.interconsulta.ui.laboratoryScreen
 
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomAppBar
@@ -20,9 +22,15 @@ import com.gsoft.interconsulta.viewModel.MainViewModel
 fun LaboratoryScreen(navController: NavController, viewModel: MainViewModel){
     var mensaje by remember { mutableStateOf("") }
 
-    fun showMyDialog(){
+
+   /* fun showMyDialog(){
         viewModel.showDialog.value = true
-    }
+    }*/
+
+   fun goToPickImage(){
+       viewModel.selectedCategory.value = "laboratorio"
+       navController.navigate("pickImage")
+   }
 
 Scaffold(
         topBar = {
@@ -31,7 +39,7 @@ Scaffold(
             }},
         bottomBar = {
             BottomAppBar(backgroundColor = darkerBlue) {
-                MyBottomBar(navController = navController,viewModel, viewModel.currentBackNavigationTo.value  , { showMyDialog() } )
+                MyBottomBar(navController = navController,viewModel, viewModel.currentBackNavigationTo.value  , { goToPickImage() } )
             }
         }
     ) {

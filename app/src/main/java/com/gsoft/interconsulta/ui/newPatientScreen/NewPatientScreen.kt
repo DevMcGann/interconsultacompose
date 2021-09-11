@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,9 +31,11 @@ import com.gsoft.interconsulta.ui.composables.MyBottomBar
 import com.gsoft.interconsulta.ui.composables.mySnackbar
 import com.gsoft.interconsulta.utils.*
 import com.gsoft.interconsulta.viewModel.MainViewModel
+import java.util.Observer
 
 @Composable
 fun NewPatientScreen(navController: NavController,viewModel : MainViewModel){
+    val labList by viewModel.uploadStudiesToStorageAndGetURL2().observeAsState(initial = emptyList())
 
 
     var mensaje by remember { mutableStateOf("") }
@@ -41,45 +44,21 @@ fun NewPatientScreen(navController: NavController,viewModel : MainViewModel){
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
 
     fun addNewPatient(){
-        if(viewModel.nombre.value.isNullOrEmpty() || viewModel.dni.value.isNullOrEmpty()){
-            mensaje = "Debes completar nombre y Dni para continuar.."
+        if(viewModel.nombre.value.isNullOrEmpty() || viewModel.dni.value.isNullOrEmpty() || viewModel.surgery.value.isNullOrEmpty()){
+            mensaje = "Debes completar nombre,Dni y cirugía para continuar.."
             viewModel.showMessageDialog.value = true
         }
-        var labList : MutableList<String> = mutableListOf()
 
-        for (item in viewModel.laboratoryList){
-            labList.add(item)
+        if (viewModel.laboratoryListUri != null){
+            //upload image to firebase and fill the "String List" with urls
         }
 
-        var studyList : MutableList<String> = mutableListOf()
+        if (viewModel.studiesListUri != null){
+            //upload image to firebase and fill the "String List" with urls
 
-        for (item in viewModel.studiesList){
-            studyList.add(item)
+
         }
 
-        var noteList : MutableList<String> = mutableListOf()
-
-        for (item in viewModel.notesList){
-            noteList.add(item)
-        }
-
-        val paciente = Patient(
-            dni = viewModel.dni.value,
-            nombre = viewModel.nombre.value,
-            laboratory = labList,
-            studies =studyList ,
-            notes =noteList
-        )
-
-        try {
-            viewModel.addPatient(paciente)
-            mensaje = "Paciente Agregado"
-            viewModel.showMessageDialog.value = true
-            viewModel.clearViewModel()
-        }catch (e:Exception){
-            mensaje = "Hubo un error al Agregar Paciente"
-            viewModel.showMessageDialog.value = true
-        }
     }
 
 

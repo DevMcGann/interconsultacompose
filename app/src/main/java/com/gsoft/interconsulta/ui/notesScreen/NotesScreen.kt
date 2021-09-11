@@ -56,6 +56,7 @@ fun NotesScreen(navController: NavController, viewModel: MainViewModel){
                 MyDialogNote(viewModel = viewModel)
             }
 
+            Spacer(modifier = Modifier.height(20.dp))
 
             NotasList(list = viewModel.notesList, viewModel = viewModel)
 

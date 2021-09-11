@@ -62,6 +62,7 @@ fun SearchPatientScreen(navController: NavController, viewModel: MainViewModel){
         val paciente = Patient(
             dni = viewModel.dni.value,
             nombre = viewModel.nombre.value,
+            surgery = viewModel.surgery.value,
             laboratory = labList,
             studies =studyList ,
             notes =noteList
@@ -87,7 +88,7 @@ fun SearchPatientScreen(navController: NavController, viewModel: MainViewModel){
             viewModel.showMessageDialog.value = true
             viewModel.clearViewModel()
         }catch(e:Exception){
-            mensaje = "No se pudo editar el Paciente"
+            mensaje = "No se pudo eliminar el Paciente"
             viewModel.showMessageDialog.value = true
         }
     }
@@ -217,7 +218,7 @@ fun SearchPatientScreen(navController: NavController, viewModel: MainViewModel){
           //paciente encontrado
           if(viewModel.showPatient.value){
               searchDNI = ""
-              PatientInfoCard(name = viewModel.nombre.value, dni =viewModel.dni.value )
+              PatientInfoCard(name = viewModel.nombre.value, dni =viewModel.dni.value, surgery=viewModel.surgery.value )
               Spacer(modifier = Modifier.height(20.dp))
               Category(navController = navController, tittle = "ESTUDIOS", drawable = R.drawable.estudios , route = STUDIES_ROUTE )
               Spacer(modifier = Modifier.height(20.dp))

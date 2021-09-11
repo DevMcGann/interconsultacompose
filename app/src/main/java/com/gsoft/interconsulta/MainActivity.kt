@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gsoft.interconsulta.ui.laboratoryScreen.LaboratoryScreen
+import com.gsoft.interconsulta.ui.laboratoryScreen.PickImage
 import com.gsoft.interconsulta.ui.mainScreen.MainScreen
 import com.gsoft.interconsulta.ui.newPatientScreen.NewPatientScreen
 import com.gsoft.interconsulta.ui.notesScreen.NotesScreen
@@ -20,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -49,6 +51,11 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = NOTES_ROUTE){
                         NotesScreen(navController = navController, viewModel = viewModel)
+                    }
+
+                    composable(route = "pickImage"){
+                        PickImage(viewModel = viewModel, navController = navController
+                        ,category = viewModel.selectedCategory.value)
                     }
                 }
             }

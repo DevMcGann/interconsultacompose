@@ -26,7 +26,7 @@ fun AddPatient(viewModel: MainViewModel){
         backgroundColor = darkerBlue,
         modifier = Modifier
             .padding(12.dp)
-            .height(250.dp)
+            .height(320.dp)
             .fillMaxWidth()
     ) {
         Column(
@@ -54,6 +54,20 @@ fun AddPatient(viewModel: MainViewModel){
                 value = viewModel.dni.value,
                 onValueChange = { viewModel.dni.value = it },
                 label = { Text("DNI del Paciente",color= Color.White, fontSize = 18.sp) },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Green,
+                    unfocusedBorderColor = Color.Black,
+                    backgroundColor = textFieldBackground,
+                    textColor = Color.White
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            OutlinedTextField(
+                shape = RoundedCornerShape(percent = 20),
+                keyboardOptions = KeyboardOptions(KeyboardCapitalization.None, false,) ,
+                value = viewModel.surgery.value,
+                onValueChange = { viewModel.surgery.value = it },
+                label = { Text("Cirugia a realizar",color= Color.White, fontSize = 18.sp) },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.Green,
                     unfocusedBorderColor = Color.Black,

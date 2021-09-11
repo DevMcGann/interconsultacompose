@@ -18,8 +18,13 @@ fun StudiesScreen(navController: NavController, viewModel: MainViewModel){
 
     var mensaje by remember { mutableStateOf("") }
 
-    fun showMyDialog(){
+    /*fun showMyDialog(){
         viewModel.showDialog.value = true
+    }*/
+
+    fun goToPickImage(){
+        viewModel.selectedCategory.value = "studies"
+        navController.navigate("pickImage")
     }
 
     Scaffold(
@@ -31,7 +36,7 @@ fun StudiesScreen(navController: NavController, viewModel: MainViewModel){
             BottomAppBar(backgroundColor = darkerBlue) {
                 MyBottomBar(
                     navController = navController,viewModel, viewModel.currentBackNavigationTo.value ,
-                    { showMyDialog() })
+                    { goToPickImage() })
             }
         }
     ) {
