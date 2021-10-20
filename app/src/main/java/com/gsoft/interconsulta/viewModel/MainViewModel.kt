@@ -3,10 +3,7 @@ package com.gsoft.interconsulta.viewModel
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.*
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.gsoft.interconsulta.data.models.Patient
 import com.gsoft.interconsulta.data.repository.PatientsRepository
 import com.gsoft.interconsulta.utils.Resultado
@@ -36,6 +33,8 @@ class MainViewModel @Inject constructor(
 
     var selectedCategory = mutableStateOf("")
 
+    var isNewPatient = mutableStateOf(false)
+
     var nombre =  mutableStateOf("")
 
     var dni = mutableStateOf("")
@@ -44,49 +43,19 @@ class MainViewModel @Inject constructor(
 
     ///////////////////////listas
 
-    var laboratoryList = mutableStateListOf<String>()
-        private set
-    var laboratoryListUri = mutableStateListOf<Uri?>(null)
+    private val _studyImagesURL = MutableLiveData<List<String>>(listOf())
+    val studyImagesURL: LiveData<List<String>> = _studyImagesURL
+    private val _studyImagesURI = MutableLiveData<List<Uri>>(listOf())
+    val studyImagesURI: LiveData<List<Uri>> = _studyImagesURI
 
-    var studiesList = mutableStateListOf<String>()
-        private set
-    var studiesListUri = mutableStateListOf<Uri?>(null)
+    private val _laboratoryImagesURL = MutableLiveData<List<String>>(listOf())
+    val laboratoryImagesURL: LiveData<List<String>> = _laboratoryImagesURL
+    private val _laboratoryImagesURI = MutableLiveData<List<Uri>>(listOf())
+    val laboratoryImagesURI: LiveData<List<Uri>> = _laboratoryImagesURI
 
 
     var notesList = mutableStateListOf<String>()
         private set
-
-
-    fun addItemToLaboratory(item: String) {
-        laboratoryList.add(item)
-    }
-
-    fun removeItemItemFromLaboratory(item: String) {
-        laboratoryList.remove(item)
-    }
-
-    fun addItemToStudies(item:String){
-        studiesList.add(item)
-    }
-
-    fun removeItemFromStudies(item:String){
-        studiesList.remove(item)
-    }
-
-    fun addUriToLaboratory(uri:Uri){
-        laboratoryListUri.add(uri)
-    }
-    fun removeUriFromLaboratory(uri:Uri){
-        laboratoryListUri.remove(uri)
-    }
-
-    fun addUriToStudies(uri:Uri){
-        studiesListUri.add(uri)
-    }
-    fun removeUriFromStudies(uri:Uri){
-        studiesListUri.remove(uri)
-    }
-
 
     fun addItemToNotes(item:String){
         notesList.add(item)
@@ -101,16 +70,26 @@ class MainViewModel @Inject constructor(
     fun clearViewModel(){
         dni.value = ""
         nombre.value = ""
-        studiesList.clear()
-        laboratoryList.clear()
-        laboratoryListUri.clear()
-        studiesListUri.clear()
         notesList.clear()
         showPatient.value = false
     }
 
 
     //repo operations
+
+    fun uploadImagesToStorageAndGetURL(uriList:MutableList<Uri>) = liveData(Dispatchers.IO){
+        emit(Resultado.Loading())
+        try{
+            var listaURI : MutableList<Uri> = mutableListOf()
+            for (item in uriList){
+                listaURI.add(item!!)
+            }
+            Log.d("IMAGENESURI", listaURI.toString())
+            emit(repo.uploadImagesAndGetURL(listaURI))
+        }catch (e:Exception){
+            emit(Resultado.Failure(e))
+        }
+    }
 
     fun addPatient(patient: Patient){
         repo.insert(patient)
@@ -119,7 +98,7 @@ class MainViewModel @Inject constructor(
     fun finishInsertNewPatient(){
         var labList : MutableList<String> = mutableListOf()
 
-        for (item in laboratoryList){
+        /*for (item in laboratoryList){
             labList.add(item)
         }
 
@@ -127,7 +106,7 @@ class MainViewModel @Inject constructor(
 
         for (item in studiesList){
             studyList.add(item)
-        }
+        }*/
 
         var noteList : MutableList<String> = mutableListOf()
 
@@ -140,7 +119,7 @@ class MainViewModel @Inject constructor(
             nombre = nombre.value,
             surgery= surgery.value,
             laboratory = labList,
-            studies =studyList ,
+            //studies =studyList ,
             notes =noteList
         )
 
@@ -148,43 +127,7 @@ class MainViewModel @Inject constructor(
 
     }
 
-    fun uploadStudiesToStorageAndGetURL() = liveData(Dispatchers.IO){
-        var lista : MutableList<Uri> = mutableListOf()
-        emit(Resultado.Loading())
-        try{
-            for (uri in studiesListUri){
-                lista.add(uri!!)
-            }
-            emit(repo.uploadImagesAndGetURL(lista))
-        }catch (e:Exception){
-            emit(Resultado.Failure(e))
-        }
-    }
-    fun uploadStudiesToStorageAndGetURL2() = liveData<MutableList<String>>(Dispatchers.IO){
-        var lista : MutableList<Uri> = mutableListOf()
-        try{
-            //studieslist is populated with images selected from phone`gallery
-            for (uri in studiesListUri){
-                lista.add(uri!!)
-            }
-           repo.uploadImagesAndGetURL2(lista)
-        }catch (e:Exception){
 
-        }
-    }
-
-    fun uploadLaboratoryToStorageAndGetURL() = liveData(Dispatchers.IO){
-        var lista : MutableList<Uri> = mutableListOf()
-        emit(Resultado.Loading())
-        try{
-            for (uri in laboratoryListUri){
-                lista.add(uri!!)
-            }
-            emit(repo.uploadImagesAndGetURL(lista))
-        }catch (e:Exception){
-            emit(Resultado.Failure(e))
-        }
-    }
 
     fun updatePaciente (patient: Patient){
         repo.update(patient)
@@ -211,12 +154,12 @@ class MainViewModel @Inject constructor(
 
                         if( result.data.laboratory != null){
                             for (lab in result.data.laboratory){
-                                addItemToLaboratory(lab)
+                                //addItemToLaboratory(lab)
                             }
                         }
                         if( result.data.studies != null){
                             for (stu in result.data.studies){
-                                addItemToStudies(stu)
+                               // addItemToStudies(stu)
                             }
                         }
                         if( result.data.notes != null){

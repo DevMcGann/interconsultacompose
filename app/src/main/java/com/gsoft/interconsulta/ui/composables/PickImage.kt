@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.gsoft.interconsulta.ui.composables.mySnackbar
 import com.gsoft.interconsulta.utils.MAIN_SCREEN_ROUTE
+import com.gsoft.interconsulta.utils.STUDIES_ROUTE
 import com.gsoft.interconsulta.viewModel.MainViewModel
 
 @Composable
@@ -52,6 +53,7 @@ fun PickImage(category:String?, viewModel: MainViewModel, navController: NavCont
             }
             mensaje = "Imagen agregada"
             viewModel.showMessageDialog.value = true
+            navController.navigate(STUDIES_ROUTE)
         }
 
     }

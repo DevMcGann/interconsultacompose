@@ -12,7 +12,7 @@ import javax.inject.Inject
 import kotlin.collections.HashMap
 
 class PatientsRepository @Inject constructor(
-    private val firestore : FirebaseFirestore
+    private val firestore: FirebaseFirestore
 ) {
 
 
@@ -75,7 +75,7 @@ class PatientsRepository @Inject constructor(
         return Resultado.Success(imgListUrl)
     }
 
-    suspend fun uploadImagesAndGetURL2(imgList: MutableList<Uri>) : MutableList<String>{
+   /* suspend fun uploadImagesAndGetURL2(imgList: MutableList<Uri>) : MutableList<String>{
         var imgListUrl : MutableList<String> = mutableListOf()
         for (imagen in imgList) {
             val filename = UUID.randomUUID().toString()
@@ -89,6 +89,6 @@ class PatientsRepository @Inject constructor(
 
         }
         return imgListUrl
-    }
+    }*/
 
 }

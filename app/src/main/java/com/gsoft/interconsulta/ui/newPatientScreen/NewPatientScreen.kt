@@ -1,5 +1,6 @@
 package com.gsoft.interconsulta.ui.newPatientScreen
 
+import android.net.Uri
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.gsoft.interconsulta.R
 import com.gsoft.interconsulta.data.models.Patient
@@ -35,7 +37,7 @@ import java.util.Observer
 
 @Composable
 fun NewPatientScreen(navController: NavController,viewModel : MainViewModel){
-    val labList by viewModel.uploadStudiesToStorageAndGetURL2().observeAsState(initial = emptyList())
+
 
 
     var mensaje by remember { mutableStateOf("") }
@@ -43,21 +45,16 @@ fun NewPatientScreen(navController: NavController,viewModel : MainViewModel){
     val state = rememberScrollState()
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
 
+    //val labList by viewModel.uploadStudiesToStorageAndGetURL2().observeAsState(initial = emptyList())
+
+
     fun addNewPatient(){
         if(viewModel.nombre.value.isNullOrEmpty() || viewModel.dni.value.isNullOrEmpty() || viewModel.surgery.value.isNullOrEmpty()){
             mensaje = "Debes completar nombre,Dni y cirugía para continuar.."
             viewModel.showMessageDialog.value = true
         }
 
-        if (viewModel.laboratoryListUri != null){
-            //upload image to firebase and fill the "String List" with urls
-        }
-
-        if (viewModel.studiesListUri != null){
-            //upload image to firebase and fill the "String List" with urls
-
-
-        }
+       viewModel.uploadImagesToStorageAndGetURL(viewModel.studyImagesURI.value as MutableList<Uri>)
 
     }
 
